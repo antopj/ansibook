@@ -1,0 +1,14 @@
+- name: Install "php7.0-fpm"
+  apt:
+    name: php7.0-fpm
+    state: present
+    install_recommends: yes
+    allow_unauthenticated: yes
+
+
+- copy:
+    src: ../templates/www.conf
+    dest: /etc/php/7.0/fpm/pool.d/ 
+
+  notify:
+    - restart php-fpm

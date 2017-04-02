@@ -1,0 +1,35 @@
+---
+- name: Creating Document Root
+  file: path=/var/www/{{ site_name }} state=directory owner=www-data group=www-data mode=0775
+
+- name: Downloading WordPress to Document Root
+  unarchive:
+    src: http://wordpress.org/wordpress-{{ wp_version }}.tar.gz
+    dest: /var/www/{{ site_name }}
+    remote_src: True
+
+#
+# - name: Download WordPress
+#   get_url: url=http://wordpress.org/wordpress-{{ wp_version }}.tar.gz dest=/srv/wordpress-{{ wp_version }}.tar.gz
+#            sha256sum="{{ wp_sha256sum }}"
+#
+# - name: Extract archive
+#   command: chdir=/srv/ /bin/tar xvf wordpress-{{ wp_version }}.tar.gz creates=/srv/wordpress
+#
+# - name: Add group "wordpress"
+#   group: name=wordpress
+
+# - name: Add user "www-data"
+#   user: name=wordpress group=wordpress home=/srv/wordpress/
+
+- name: Fetch random salts for WordPress config
+  local_action: command curl https://api.wordpress.org/secret-key/1.1/salt/
+  register: "wp_salt"
+  become: no
+  become_method: sudo
+
+- name: Copy WordPress config file
+  template: src=wp-config.php dest=/var/www/{{ site_name }}
+
+- name: Change ownership of WordPress installation
+  file: path=/var/www/{{ site_name }} owner=www-data group=www-data state=directory recurse=yes setype=httpd_sys_content_t

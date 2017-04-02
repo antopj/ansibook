@@ -1,0 +1,18 @@
+- name: Ensure MySQL Python libraries are installed.
+  apt: "name=python-mysqldb state=installed"
+
+
+- name: Install MySQL packages
+  apt:
+      name: "{{ item }}"
+      state: present
+      allow_unauthenticated: yes
+  with_items:
+        - python-mysqldb
+        - mysql-common
+        - mysql-server
+        - mysql-client
+        - build-essential
+        - php7.0-mysql
+  notify:
+    - restart mysql

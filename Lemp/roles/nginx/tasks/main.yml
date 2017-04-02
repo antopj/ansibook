@@ -1,0 +1,32 @@
+- name: Install "Nginx"
+  apt:
+     name: nginx
+     update_cache: yes
+     state: present
+     install_recommends: yes
+     allow_unauthenticated: yes
+
+- copy:
+    src: ../templates/conf.d
+    dest: /etc/nginx
+
+# - file:
+#     path: /var/www/{{ site_name }}/conf/nginx
+#     state: directory
+
+# - copy:
+#     src: ../templates/nginx-wp/
+#     dest: /var/www/{{ site_name }}/conf/nginx
+
+- name: Copy Nginx-Site Configuration
+  template: src=wp-sites-available dest=/etc/nginx/sites-available/{{ site_name }}
+
+
+- name: Enabling Site
+  file:
+    src: /etc/nginx/sites-available/{{ site_name }}
+    dest: /etc/nginx/sites-enabled/{{ site_name }}
+    state: link
+
+  notify:
+      - restart nginx

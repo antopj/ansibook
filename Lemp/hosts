@@ -1,0 +1,2 @@
+[test]
+34.200.56.112 ansible_python_interpreter=/usr/bin/python

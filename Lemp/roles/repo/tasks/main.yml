@@ -1,0 +1,23 @@
+#
+#Adding Repositories for LEMP Stack Installation
+
+# - name: add MariaDB Repo
+#   apt_repository:
+#     repo: deb http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.1/ubuntu xenial main
+#     state: present
+#     filename: 'do-mariadb'
+#     update_cache:
+
+- name: Add EasyEngine Nginx Repo
+  apt_repository:
+    repo: deb http://download.opensuse.org/repositories/home:/rtCamp:/EasyEngine/xUbuntu_16.04/ /
+    state: present
+    filename: 'ee-nginx'
+    update_cache: no
+
+- name: Add Ondrej Php Repo
+  apt_repository:
+    repo: deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main
+    state: present
+    filename: 'ondrej-ubuntu-php-xenial'
+    update_cache: yes
